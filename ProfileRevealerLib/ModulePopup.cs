@@ -114,12 +114,21 @@ namespace ProfileRevealerLib {
 		}
 
 		private IEnumerator SetSprite() {
-			WWW www = new WWW("https://ktane.timwi.de/Icons/" + moduleName + ".png");
-			yield return www;
-			if (www.error != null) {
-				Debug.LogFormat("[Icon Gex] Error fetching icon for {1}: {2}", moduleName, www.error);
-				Debug.LogFormat("[Icon Gex] (This error is standard in the case of a module without an icon.)");
+			var url = "https://ktane.timwi.de/Icons/" + moduleName + ".png";
+			using var http = UnityWebRequest.Get(url);
+
+			yield return http.SendWebRequest();
+
+			if (http.isNetworkError) {
+				Debug.LogFormat("[Icon Gex] Error fetching icon for {1} with error {2}", moduleName, http.error);
+				yield break;
 			}
+
+			if (http.responseCode != 200) {
+				Debug.LogFormat("[Icon Gex] Error fetching icon for {1} with response code {2}", moduleName, http.responseCode);
+				yield break;
+			}
+
 			Texture2D tex = new Texture2D(1, 1);
 			www.LoadImageIntoTexture(tex);
 			www.Dispose();
