@@ -11,25 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
   m_Name: ModConfig
   m_EditorClassIdentifier: 
-  id: ProfileRevealer
-  title: Profile Revealer
-  author: Andrio Celos
-  description: "Have you ever been wondering whose [url=https://steamcommunity.com/sharedfiles/filedetails/?id=801400247]Mod
-    Selector[/url] profile let that module appear on the bomb, or just want to know
-    which of your experts can help you with it? This mod will give you the answers
-    without leaving the game.\r\n\r\nHighlight (but do not select) any module for
-    a few seconds, or press F1 while it is highlighted or selected, and the mod will
-    show the following:\r\n* All active expert profiles which enable the module\r\n*
-    All active expert profiles which disable the module\r\n* All inactive defuser
-    profiles which would veto the module\r\n* When using Dynamic Mission Generator
-    profile pools, which profile the module was chosen from\r\n\r\nThe key mentioned
-    above and the delay before the overlay appears can be configured. There is also
-    an option to show the module's name, but using this will disable submitting leaderboard
-    entries.\r\n\r\nWhen using motion controls in VR, instead highlight any highlightable
-    part of a module and press the grip button on a Steam VR controller, or the B
-    or Y button on an Oculus Touch controller. Press the button again with nothing
-    highlighted to hide the popup.\r\n"
-  version: 1.6
-  outputFolder: C:\Program Files (x86)\Steam\steamapps\common\Keep Talking and Nobody
-    Explodes\mods
+  id: IconGex
+  title: Icon Gex
+  author: eXish
+  description: The blan icon making icon machine
+  version: 1.0
+  outputFolder: build
   previewImage: {fileID: 2800000, guid: 4bb2e0eb975142949b92d53111980ee6, type: 3}
