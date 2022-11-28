@@ -76,7 +76,7 @@ namespace ProfileRevealerLib {
 
 #if !DEBUG
 		private IEnumerator SearchForVrControllersCoroutine() {
-			Debug.Log($"[Profile Revealer] Motion controls are active. Searching for VR controllers.");
+			Debug.Log($"[Icon Gex] Motion controls are active. Searching for VR controllers.");
 			this.vrControllers = new List<KTTrackedController>();
 			while (true) {
 				foreach (var controller in KTInputManager.Instance.MotionControls.Controllers) {
@@ -84,16 +84,16 @@ namespace ProfileRevealerLib {
 						this.vrControllers.Add(controller);
 						var steamVRController = controller.GetComponent<SteamVR_TrackedController>();
 						if (steamVRController != null) {
-							Debug.Log($"[Profile Revealer] Found a Steam VR controller.");
+							Debug.Log($"[Icon Gex] Found a Steam VR controller.");
 							steamVRController.Gripped += (sender, e) => this.VrButtonPressed(controller);
 						} else {
 							var oculusVRController = controller.GetComponent<KTOculusTouchDevice>();
 							if (oculusVRController != null) {
-								Debug.Log($"[Profile Revealer] Found an Oculus VR controller.");
+								Debug.Log($"[Icon Gex] Found an Oculus VR controller.");
 								oculusVRController.ButtonTwoPressed += () => this.VrButtonPressed(controller);
 								oculusVRController.ButtonFourPressed += () => this.VrButtonPressed(controller);
 							} else
-								Debug.LogWarning($"[Profile Revealer] Found an unknown VR controller.");
+								Debug.LogWarning($"[Icon Gex] Found an unknown VR controller.");
 						}
 					}
 				}
@@ -107,10 +107,10 @@ namespace ProfileRevealerLib {
 				this.highlightedModulePopup = null;
 			}
 			var selectable = (Selectable) currentSelectableField.GetValue(controller);
-			Debug.Log($"[Profile Revealer] Grip button pressed on {selectable}.");
+			Debug.Log($"[Icon Gex] Grip button pressed on {selectable}.");
 			while (selectable != null && selectable.GetComponent<BombComponent>() == null)
 				selectable = selectable.Parent;
-			Debug.Log($"[Profile Revealer] Module parent is {selectable}.");
+			Debug.Log($"[Icon Gex] Module parent is {selectable}.");
 			if (selectable != null) {
 				var popup = this.popups.FirstOrDefault(p => p.Module == selectable.transform);
 				if (popup != null) {
@@ -122,7 +122,7 @@ namespace ProfileRevealerLib {
 #endif
 
 		private void GetModuleJSON() {
-			Debug.Log($"[Profile Revealer] Starting request for boss status..");
+			Debug.Log($"[Icon Gex] Starting request for boss status..");
 			this.bossStatus = new Dictionary<string, IList<string>>();
 			this.StartCoroutine(this.GetModuleJSONCoroutine());
 		}
@@ -134,17 +134,17 @@ namespace ProfileRevealerLib {
 			yield return http.SendWebRequest();
 
 			if (http.isNetworkError) {
-				Debug.LogFormat(@"[Profile Revealer] Website {0} responded with error: {1}", url, http.error);
+				Debug.LogFormat(@"[Icon Gex] Website {0} responded with error: {1}", url, http.error);
 				yield break;
 			}
 
 			if (http.responseCode != 200) {
-				Debug.LogFormat(@"[Profile Revealer] Website {0} responded with code: {1}", url, http.responseCode);
+				Debug.LogFormat(@"[Icon Gex] Website {0} responded with code: {1}", url, http.responseCode);
 				yield break;
 			}
 
 			if (!(JObject.Parse(http.downloadHandler.text)["KtaneModules"] is JArray allModules)) {
-				Debug.LogFormat(@"[Profile Revealer] Website {0} did not respond with a JSON array at “KtaneModules” key.", url, http.responseCode);
+				Debug.LogFormat(@"[Icon Gex] Website {0} did not respond with a JSON array at “KtaneModules” key.", url, http.responseCode);
 				yield break;
 			}
 
@@ -176,10 +176,10 @@ namespace ProfileRevealerLib {
 				if (status.Count > 0) {
 					if (module["DisplayName"] is JValue displayNameV && displayNameV.Value is string displayName) {
 						this.bossStatus.Add(displayName, status);
-						Debug.LogFormat(@"[Profile Revealer] Setting boss status of {0} to {1}.", displayName, string.Join(", ", status.ToArray()));
+						Debug.LogFormat(@"[Icon Gex] Setting boss status of {0} to {1}.", displayName, string.Join(", ", status.ToArray()));
 					} else if (module["Name"] is JValue nameV && nameV.Value is string name) {
 						this.bossStatus.Add(name, status);
-						Debug.LogFormat(@"[Profile Revealer] Setting boss status of {0} to {1}.", name, string.Join(", ", status.ToArray()));
+						Debug.LogFormat(@"[Icon Gex] Setting boss status of {0} to {1}.", name, string.Join(", ", status.ToArray()));
 
 					}
 				}
@@ -234,12 +234,12 @@ namespace ProfileRevealerLib {
 			} else if (state == KMGameInfo.State.Setup) {
 				this.popups.Clear();
 				if (this.tweaksService == null) {
-					Debug.Log("[Profile Revealer] Looking for Tweaks service...");
+					Debug.Log("[Icon Gex] Looking for Tweaks service...");
 					var obj = GameObject.Find("Tweaks(Clone)");
 					if (obj != null) this.tweaksService = obj.GetComponent("Tweaks");
-					if (this.tweaksService != null) Debug.Log("[Profile Revealer] Found Tweaks service.");
+					if (this.tweaksService != null) Debug.Log("[Icon Gex] Found Tweaks service.");
 					else {
-						Debug.Log("[Profile Revealer] Did not find Tweaks service.");
+						Debug.Log("[Icon Gex] Did not find Tweaks service.");
 						LeaderboardController.Install();
 					}
 				}
@@ -276,7 +276,7 @@ namespace ProfileRevealerLib {
 					rewriteFile = true;
 				}
 			} catch (JsonSerializationException ex) {
-				Debug.LogError("[Profile Revealer] The mod settings file is invalid.");
+				Debug.LogError("[Icon Gex] The mod settings file is invalid.");
 				Debug.LogException(ex, this);
 				this.config = new Config();
 				rewriteFile = true;
@@ -294,7 +294,7 @@ namespace ProfileRevealerLib {
 					this.tweaksDisableAdvantageousField = tweaksSettings.GetType().GetField("DisableAdvantageous", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
 				var o = this.tweaksDisableAdvantageousField.GetValue(tweaksSettings);
-				Debug.LogWarning($"[Profile Revealer] DisableAdvantageous = {o}");
+				Debug.LogWarning($"[Icon Gex] DisableAdvantageous = {o}");
 
 				var disableAdvantageousFeatures = o switch {
 					bool b => b,
@@ -306,7 +306,7 @@ namespace ProfileRevealerLib {
 					_ => false
 				};
 				if (disableAdvantageousFeatures) {
-					Debug.LogWarning("[Profile Revealer] Advantageous features are disabled in Tweaks settings. Overriding Show Module Names and Show Boss Status settings.");
+					Debug.LogWarning("[Icon Gex] Advantageous features are disabled in Tweaks settings. Overriding Show Module Names and Show Boss Status settings.");
 					this.config.ShowModuleNames = false;
 					this.config.ShowBossStatus = false;
 				}
@@ -332,7 +332,7 @@ namespace ProfileRevealerLib {
 
 #if !DEBUG
 		private IEnumerator CheckForBombs() {
-			Debug.Log("[Profile Revealer] Waiting for bombs...");
+			Debug.Log("[Icon Gex] Waiting for bombs...");
 			var oldBombs = new List<Bomb>();
 			var bombs = SceneManager.Instance.GameplayState.Bombs;
 			var count = 0;
@@ -343,7 +343,7 @@ namespace ProfileRevealerLib {
 				yield return new WaitForSeconds(0.5f);
 				if (bombs.Count == count) break;
 			}
-			Debug.Log($"[Profile Revealer] Found {bombs.Count} bomb(s).");
+			Debug.Log($"[Icon Gex] Found {bombs.Count} bomb(s).");
 
 			var isFactoryRoom = bombs[0].GetComponent<Selectable>().Parent.name.StartsWith("FactoryRoom");
 
@@ -370,7 +370,7 @@ namespace ProfileRevealerLib {
 						using var reader = new StreamReader(file);
 						var profile = new JsonSerializer().Deserialize<Profile>(new JsonTextReader(reader));
 						if (profile.DisabledList == null) {
-							Debug.LogWarning($"[Profile Revealer] Could not load profile {Path.GetFileName(file)}");
+							Debug.LogWarning($"[Icon Gex] Could not load profile {Path.GetFileName(file)}");
 							Debug.LogWarning($"{nameof(profile.DisabledList)} is missing.");
 							continue;
 						}
@@ -382,14 +382,14 @@ namespace ProfileRevealerLib {
 								inactiveVetos.Add(new KeyValuePair<string, HashSet<string>>(profileName, profile.DisabledList));
 						}
 					} catch (Exception ex) {
-						Debug.LogWarning($"[Profile Revealer] Could not load profile {Path.GetFileName(file)}");
+						Debug.LogWarning($"[Icon Gex] Could not load profile {Path.GetFileName(file)}");
 						Debug.LogException(ex, this);
 					}
 				}
 			} else
-				Debug.Log($"[Profile Revealer] The Mod Selector profile directory does not exist.");
+				Debug.Log($"[Icon Gex] The Mod Selector profile directory does not exist.");
 
-			Debug.Log($"[Profile Revealer] Looking for Dynamic Mission Generator API.");
+			Debug.Log($"[Icon Gex] Looking for Dynamic Mission Generator API.");
 			var dynamicMissionGeneratorService = GameObject.Find("Dynamic Mission Generator API");
 			var dynamicMissionGeneratorApi = dynamicMissionGeneratorService?.GetComponent<IDictionary<string, IDictionary<string, IList<string>>>>();
 			this.moduleProfiles = dynamicMissionGeneratorApi?["ModuleProfiles"];
@@ -402,7 +402,7 @@ namespace ProfileRevealerLib {
 					var moduleIndex = 0;
 					foreach (var component in bomb.BombComponents) {
 						if (component.ComponentType == ComponentTypeEnum.Empty || component.ComponentType == ComponentTypeEnum.Timer) continue;
-						Debug.Log($"[Profile Revealer] Attaching to '{component.name}'.");
+						Debug.Log($"[Icon Gex] Attaching to '{component.name}'.");
 
 						var kmBombModule = component.GetComponent<KMBombModule>();
 						var kmNeedyModule = component.GetComponent<KMNeedyModule>();
@@ -447,7 +447,7 @@ namespace ProfileRevealerLib {
 				}
 
 				if (!isFactoryRoom) yield break;
-				Debug.Log("[Profile Revealer] Factory room is active. Waiting for new bombs.");
+				Debug.Log("[Icon Gex] Factory room is active. Waiting for new bombs.");
 				while (!bombs.Except(oldBombs).Any()) {
 					if (this.gameState != KMGameInfo.State.Gameplay) yield break;
 					yield return new WaitForSeconds(1);
@@ -457,7 +457,7 @@ namespace ProfileRevealerLib {
 #endif
 
 		private IEnumerator CheckForBombsTest() {
-			Debug.Log("[Profile Revealer] Looking for bombs.");
+			Debug.Log("[Icon Gex] Looking for bombs.");
 			KMBomb[] bombs;
 			while (true) {
 				bombs = FindObjectsOfType<KMBomb>();
@@ -474,7 +474,7 @@ namespace ProfileRevealerLib {
 						if (needyModule != null) name = needyModule.ModuleDisplayName;
 						else continue;
 					}
-					Debug.Log($"[Profile Revealer] Attaching to '{name}'.");
+					Debug.Log($"[Icon Gex] Attaching to '{name}'.");
 
 					var popup = Instantiate(this.PopupPrefab, transform, false);
 					popup.Module = transform;

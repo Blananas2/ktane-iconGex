@@ -87,6 +87,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4588458315518318}
   - component: {fileID: 212384695153529218}
+  - component: {fileID: 114814116756295740}
   m_Layer: 0
   m_Name: Icon
   m_TagString: Untagged
@@ -135,11 +136,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1753610036141400}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -320, y: -320, z: 0}
   m_LocalScale: {x: 1999.9995, y: 2000.0056, z: 3333.3335}
   m_Children: []
   m_Father: {fileID: 224344186849792930}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &114027580534942416
 MonoBehaviour:
@@ -149,7 +150,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1506847546024086}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1142665482, guid: cb72d33074053b84da0cdb9a6934e36b, type: 3}
+  m_Script: {fileID: -1142665482, guid: 43127debd13769c4ebafbcc7e354ceee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Canvas: {fileID: 224344186849792930}
@@ -269,6 +270,19 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Hello world!
+--- !u!114 &114814116756295740
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1753610036141400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Sprites/Default
 --- !u!114 &114830797566700816
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -408,8 +422,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.0003, y: 0.00030000013, z: 0.00030000013}
   m_Children:
-  - {fileID: 4588458315518318}
   - {fileID: 224992723864200646}
+  - {fileID: 4588458315518318}
   m_Father: {fileID: 4361464729065148}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
@@ -448,7 +462,7 @@ RectTransform:
   m_Children:
   - {fileID: 224930855757565290}
   m_Father: {fileID: 224344186849792930}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}

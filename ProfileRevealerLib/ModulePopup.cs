@@ -29,6 +29,26 @@ namespace ProfileRevealerLib {
 		internal IEnumerable<string> inactiveProfiles;
 		private Coroutine coroutine;
 
+		private static Dictionary<string, string> mismatchedNames = new Dictionary<string, string>
+		{
+		{ "Needy Vent Gas", "Venting Gas" },
+		{ "Needy Capacitor", "Capacitor Discharge" },
+		{ "Needy Knob", "Knob" },
+		{ "Rock-Paper-Scissors-L.-Sp.", "Rock-Paper-Scissors-Lizard-Spock" },
+		{ "...?", "Punctuation Marks" },
+		{ "Needy Crafting Table", "The Crafting Table" },
+		{ "Needy Beer Refill Mod", "Refill that Beer!" },
+		{ "Needy Math", "Math" },
+		{ "Needy Quiz", "Answering Questions" },
+		{ "Needy Rotary Phone", "Rotary Phone" },
+		{ "Needy Button Masher", "Button Masher" },
+		{ "Needy Shape Memory", "Shape Memory" },
+		{ "Alphebtic Order", "Alphabetical Order" },
+		{ "Needy Wingdings", "Wingdings" },
+		{ "Needy Pong", "Pong" },
+		{ "A>N<D", "A_N_D" }
+	};
+
 		public void Start() {
 			this.Canvas.gameObject.SetActive(false);
 
@@ -52,6 +72,15 @@ namespace ProfileRevealerLib {
 			foreach (var collider in colliders) collider.enabled = false;
 
 			StartCoroutine(SetSprite());
+		}
+
+		public void Update() {
+			if (Input.GetKeyDown(KeyCode.LeftBracket) && this.Canvas.gameObject.activeSelf) {
+				Icon.transform.localPosition += new Vector3(0, 0, -20);
+			}
+			else if (Input.GetKeyDown(KeyCode.RightBracket) && this.Canvas.gameObject.activeSelf) {
+				Icon.transform.localPosition += new Vector3(0, 0, 20);
+			}
 		}
 
 		private void SetText() {
@@ -114,26 +143,24 @@ namespace ProfileRevealerLib {
 		}
 
 		private IEnumerator SetSprite() {
-			var url = "https://ktane.timwi.de/Icons/" + moduleName + ".png";
-			using var http = UnityWebRequest.Get(url);
+			using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture("https://ktane.timwi.de/Icons/" + (mismatchedNames.ContainsKey(moduleName) ? mismatchedNames[moduleName] : moduleName) + ".png")) {
 
-			yield return http.SendWebRequest();
+				yield return uwr.SendWebRequest();
 
-			if (http.isNetworkError) {
-				Debug.LogFormat("[Icon Gex] Error fetching icon for {1} with error {2}", moduleName, http.error);
-				yield break;
+				if (uwr.isNetworkError) {
+					Debug.LogFormat(@"[Icon Gex] Icon request for {0} responded with error: {1}", moduleName, uwr.error);
+					yield break;
+				}
+
+				if (uwr.responseCode != 200) {
+					Debug.LogFormat(@"[Icon Gex] Icon request for {0} responded with code: {1}", moduleName, uwr.responseCode);
+					yield break;
+				}
+
+				var texture = DownloadHandlerTexture.GetContent(uwr);
+				texture.filterMode = 0;
+				Icon.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
 			}
-
-			if (http.responseCode != 200) {
-				Debug.LogFormat("[Icon Gex] Error fetching icon for {1} with response code {2}", moduleName, http.responseCode);
-				yield break;
-			}
-
-			Texture2D tex = new Texture2D(1, 1);
-			www.LoadImageIntoTexture(tex);
-			www.Dispose();
-			tex.filterMode = 0;
-			Icon.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
 		}
 	}
 }
